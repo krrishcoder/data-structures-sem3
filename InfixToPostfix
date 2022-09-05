@@ -1,0 +1,209 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+ template<class X> class stack{
+    int top;
+    int size;
+    X *arr;
+    int capacity;
+
+public:
+    stack(int length){
+        if(length <0){
+               cout<<"wrong"<<endl;
+
+        }else{
+        capacity= length;
+        arr = new X[length];
+        top= -1;
+        size=0;
+        }
+
+    }
+
+   void push(X data){
+       if(top>= capacity-1){
+        cout<<"overflow"<<endl;
+        return;
+       }
+       arr[++top]= data;
+       size++;
+    }
+    void pop(){
+    if(isempty()){
+        cout<<"underflow"<<endl;
+        return;
+    }
+    else{
+        cout<<"popped"<<endl;
+        --top;
+        size--;
+    }
+    }
+
+   int isempty() {
+   return (top== -1);
+
+   }
+
+
+   int sizex(){
+   return size;
+   }
+
+   X topEl(){
+       if(isempty()){
+            cout<<"stack is empty this function is not possible"<<endl;
+        return arr[0];
+       }
+       return arr[top];
+   }
+
+   void clear(){
+   top = -1;
+   size=0;
+   return;
+   }
+
+   void multiPush(int no_of_datas, X *values){
+       if(capacity-1 < top+ no_of_datas){
+            cout<<"stack cannot hold that much of datas"<<endl;
+        return;
+       }
+
+       int i=0;
+       while(i != no_of_datas){
+        push(values[i++]);
+       }
+       return;
+   }
+
+   void multiPop(int n){
+        int i=0;
+        if(n <= size){
+             while(i != n){
+        pop();
+        i++;
+       }
+       cout <<"this many "<< n <<" elements has been pop out from stack"<< endl;
+      }
+       return;
+   }
+
+
+};
+
+
+
+
+    int pre(char c){
+        
+        if(c=='^'){
+            return 1;
+        }else if(c=='/' || c== '*'){
+            return 2;
+        }else if(c=='+' || c=='-'){
+            return 3;
+        }else{
+            return -1;
+        }
+    }
+    
+    void add(char c ,string &str ){
+        if(c=='^'){
+            str+="^";
+            return ;
+        }else if(c=='/' ){
+            str+="/";
+            return ;
+        }else if(c=='*'){
+            str+="*";
+            return ;
+        }
+            else if(c=='+'){
+                 str+="+";
+                return;
+        }else if(c=='-'){
+            str+="-";
+            return ;
+        }else{
+            
+        }
+       
+        
+    }
+    
+
+
+string function(string str){
+    
+    stack <char>opstk(str.length());
+    
+    
+    
+    
+    
+    
+    int i=0;
+    string ans="";
+    
+    while(i != str.length()){
+        
+         char symb = str.at(i++);
+         int charInt = (int)symb-48;
+        
+        
+  if(charInt >=0 && charInt <=9){
+            //symbol is operand so print in output
+            
+            ans += to_string(charInt);
+          
+
+    }else{
+        
+        if( pre(opstk.topEl())> pre(symb) || opstk.isempty()){
+        opstk.push(symb);
+        
+        }else{
+            
+            char s = opstk.topEl();
+            opstk.pop();
+            add(s,ans);
+        
+            
+            
+            
+        }
+    }
+    
+}
+
+while(!opstk.isempty()){
+  char s = opstk.topEl();
+            opstk.pop();
+           add(s,ans);
+       
+}
+
+
+return ans;
+}
+
+int main(){
+    
+    
+    string str ="2+3*7+9/3";
+    cout<<"RESULT : "<<function(str);
+    
+ 
+    
+    
+    return 0;
+}
