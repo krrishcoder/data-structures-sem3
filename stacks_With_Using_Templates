@@ -1,0 +1,193 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+ template<class X> class stack{
+    int top;
+    int size;
+    X *arr;
+    int capacity;
+
+public:
+    stack(int length){
+        if(length <0){
+               cout<<"wrong"<<endl;
+
+        }else{
+        capacity= length;
+        arr = new X[length];
+        top= -1;
+        size=0;
+        }
+
+    }
+
+   void push(X data){
+       if(top>= capacity-1){
+        cout<<"overflow"<<endl;
+        return;
+       }
+       arr[++top]= data;
+       size++;
+    }
+    void pop(){
+    if(isempty()){
+        cout<<"underflow"<<endl;
+        return;
+    }
+    else{
+        cout<<"popped"<<endl;
+        --top;
+        size--;
+    }
+    }
+
+   int isempty() {
+   return (top== -1);
+
+   }
+
+
+   int sizex(){
+   return size;
+   }
+
+   X topEl(){
+       if(isempty()){
+            cout<<"stack is empty this function is not possible"<<endl;
+        return arr[0];
+       }
+       return arr[top];
+   }
+
+   void clear(){
+   top = -1;
+   size=0;
+   return;
+   }
+
+   void multiPush(int no_of_datas, X *values){
+       if(capacity-1 < top+ no_of_datas){
+            cout<<"stack cannot hold that much of datas"<<endl;
+        return;
+       }
+
+       int i=0;
+       while(i != no_of_datas){
+        push(values[i++]);
+       }
+       return;
+   }
+
+   void multiPop(int n){
+        int i=0;
+        if(n <= size){
+             while(i != n){
+        pop();
+        i++;
+       }
+       cout <<"this many "<< n <<" elements has been pop out from stack"<< endl;
+      }
+       return;
+   }
+
+
+};
+
+int main()
+{
+
+
+	int k;
+	cout<<"please enter the size of array :";
+	cin>>k;
+
+
+	stack <string> obj(k);                          //data type must be changed by you
+	int x;
+	while(x!=0){
+
+	cout<<" 1.push :"<<endl;
+	cout<<" 2.pop :"<<endl;
+	cout<<" 3.size :"<<endl;
+	cout<<" 4.isempty :"<<endl;
+	cout<<" 5.top element "<<endl;
+	cout<<" 6.multipush : "<<endl;
+	cout<<" 7.multipop : "<<endl;
+	cout<<" 8.clear : "<<endl;
+
+	cout<<" 0.exit"<<endl;
+
+	int choice ;
+	cout<<"Enter a choice"<<endl;
+	cin>>choice;
+
+
+	// getline(cin, str);
+
+if(choice==1){
+
+		       cout<<"enter the element to be pushed: ";
+				string p;                                         //data type must be changed by You
+				cin>>p;
+				obj.push(p);
+
+}else if(choice == 2){
+			obj.pop();
+
+}else if(choice ==3){
+
+		     cout<< "size is "<< obj.sizex()<<endl;
+}else if(choice == 4){
+
+		      cout<<"RESULT : ";
+		 	  cout<<obj.isempty();
+}else if(choice==5){
+
+		      cout<<"top element is "<<obj.topEl();
+		      cout<<endl;
+}else if(choice ==6){
+                cout<<"number of elements do you want to push on stack : ";
+		        int cc;
+
+
+		        cin>>cc;
+		       string *arrt = new string[cc];                       //data type must be changed by you
+
+		        for(int i=0;i<cc;++i){
+                    cout<<i+1<<" . element : ";
+                    cin>>arrt[i];
+		        }
+
+
+               obj.multiPush(cc,arrt);
+
+}else if(choice ==8){
+           obj.clear();
+            cout<<"clear.."<<endl;
+	}else if(choice ==7){
+                cout<<"number of elements do you want to pop from stack : ";
+		        int pp;
+		        cin>>pp;
+                if(pp <= obj.sizex()){
+                  obj.multiPop(pp);
+                }else{
+                cout<<"not that many elements"<<endl;
+                }
+
+
+	}else {
+	cout<<"wrong input"<<endl;
+
+	}
+	}
+
+
+
+
+
+
+
+    return 0;
+}
