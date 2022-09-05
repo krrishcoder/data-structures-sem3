@@ -1,0 +1,175 @@
+#include <iostream>
+#include <string>
+#include <cmath>
+
+#include <math.h>
+
+using namespace std;
+
+class stack{
+    int top;
+    int size;
+    int *arr;
+    int capacity;
+
+public:
+    stack(int length){
+        if(length <0){
+               cout<<"wrong"<<endl;
+
+        }else{
+        capacity= length;
+        arr = new int[length];
+        top= -1;
+        size=0;
+        }
+
+    }
+
+   void push(int data){
+       if(top>= capacity-1){
+        cout<<"overflow"<<endl;
+        return;
+       }
+       arr[++top]= data;
+       size++;
+    }
+    void pop(){
+    if(isempty()){
+        cout<<"underflow"<<endl;
+        return;
+    }
+    else{
+        cout<<"popped"<<endl;
+        --top;
+        size--;
+    }
+    }
+
+   int isempty() {
+   return (top== -1);
+
+   }
+
+
+   int sizex(){
+   return size;
+   }
+
+   int topEl(){
+       if(isempty()){
+            cout<<"stack is empty this function is not possible"<<endl;
+        return -1;
+       }
+       return arr[top];
+   }
+
+   void clear(){
+   top = -1;
+   size=0;
+   return;
+   }
+
+   void multiPush(int no_of_datas, int *values){
+       if(capacity-1 < top+ no_of_datas){
+            cout<<"stack cannot hold that much of datas"<<endl;
+        return;
+       }
+
+       int i=0;
+       while(i != no_of_datas){
+        push(values[i++]);
+       }
+       return;
+   }
+
+   void multiPop(int n){
+        int i=0;
+        if(n <= size){
+             while(i != n){
+        pop();
+        i++;
+       }
+       cout <<"this many "<< n <<" elements has been pop out from stack"<< endl;
+      }
+       return;
+   }
+
+
+};
+
+
+int function(string str){
+
+    stack opstk(str.length());
+
+    int i=0;
+    while((i)!= str.length()){
+            char symb = str.at(i++);
+
+    if(((int)symb) >=48 && ((int)symb) <=57){
+            //symbol is operand so push it
+            int ob = (int)symb - 48 ;
+            opstk.push(ob);
+
+    }else{
+
+        int opnd2 = opstk.topEl();
+        opstk.pop();
+
+        int opnd1 = opstk.topEl();
+        opstk.pop();
+
+        int ans=0;
+
+        switch(symb){
+
+        case '+':ans = opnd2+opnd1;
+        opstk.push(ans);
+        break;
+        case '-': ans = opnd1 - opnd2;
+        opstk.push(ans);
+        break;
+        case '*': ans = opnd1* opnd2;
+         opstk.push(ans);
+        break;
+        case '/': ans = opnd1/opnd2;
+         opstk.push(ans);
+        break;
+         case '^': ans = pow(opnd1,opnd2);
+         opstk.push(ans);
+        break;
+
+        default:cout<<"error";
+
+        }
+
+       
+    }
+
+
+
+    }
+     int ret = opstk.topEl();
+        opstk.pop();
+        return ret;
+    
+
+}
+
+int main()
+{
+    string str = "231*+9-";
+
+cout<<"RESULT  : "<<function(str);
+
+
+
+
+
+
+
+
+
+    return 0;
+}
