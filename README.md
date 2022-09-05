@@ -5,7 +5,9 @@ could be incomplete code so debug yourself
 data structures
 ------------------------------------------------
 < a. stacks
+    stacks, stacks with template
 < b. queue
+    linear queue , circular queue , with templates
 -------------------------------------------------
 application of stack
 < 1. postfix expression calculation 
