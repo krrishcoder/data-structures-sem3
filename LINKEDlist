@@ -1,0 +1,195 @@
+#include <iostream>
+
+using namespace std;
+
+
+class node{
+    int data;
+    node *next;
+    friend class SLL;  //singly linked list
+    
+public:
+    node(int val,node *ptr =0){           //if user dont pass any value than it has next 0
+        data=val;
+        next=ptr;
+    }
+    
+};
+
+class SLL{
+    node *head;
+    
+public:
+    SLL();
+    void addToHead(int val);
+    void display();
+    void deleteFromHead();
+    void insertAfter(int val, node *ptr);
+    node *search(int val);
+    void insertAfter(int val,int element);
+    void insertAtEnd(int val);
+    void deleteFromEnd();
+    SLL *copy();
+    void deleteNode(int val);
+    void reverse();
+    ~SLL(){
+        while(head){
+            deleteFromHead();
+        }
+        
+    }
+};
+SLL::SLL(){
+    
+        head=0;         //no head is made if SLL is empty
+    
+}
+void SLL::addToHead(int val){ //always added to head
+    head = new node(val,head);
+    
+}
+void SLL::display(){
+    node *ptr = head;
+    while(ptr){
+        cout<<ptr->data<<endl;;
+        ptr = ptr->next;
+    }
+}
+void SLL::deleteFromHead(){
+    
+    if(head){
+    node *temp = head->next;
+    delete head;
+    head=0;
+    head = temp;
+    }else{
+      return ;
+    
+    }
+}
+void SLL::insertAfter(int val, node *ptr){
+    node *NEWnode = new node(val);
+    NEWnode->next = ptr->next;
+    ptr->next = NEWnode;
+    
+}
+
+node* SLL::search(int val){
+    node *ptr = head;
+    
+    while(ptr){
+        if(ptr->data == val){
+             return ptr;
+            break;
+        }
+        ptr = ptr->next;
+    }
+    
+   return 0;
+}
+void SLL::insertAfter(int val,int element){
+    node *temp = search(element);
+    if(temp){
+        insertAfter(val,temp);
+    }else{
+        head = new node(val,head);          //if element was not found
+    }
+}
+
+void SLL::insertAtEnd(int val){
+    node *ptr = head;
+    
+    if(head){
+        while(ptr->next !=0){
+            ptr = ptr->next;
+        }
+        ptr->next = new node(val);
+    }else{
+        head = new node(val);  //that means linked lit was empty
+    }
+    
+}
+
+void SLL::deleteFromEnd(){
+    if(head){
+        if(head->next !=0){
+            node *ptr = head;
+            while(ptr->next->next !=0){
+                ptr = ptr->next;
+            }
+            delete ptr->next;
+            ptr->next=0;
+            
+        }else{
+            delete head;
+            head=0;
+        }
+        
+    }else{
+        cout<<"list is empty , cannot delete any item "<<endl;
+        return;
+    }
+}
+
+SLL* SLL::copy(){
+    SLL *list1 = new SLL();
+    node *ptr = head;
+    
+    while(ptr){
+        list1->insertAtEnd(ptr->data); //bcoz insert at head will reverse the data in list
+        ptr = ptr->next;
+    }
+    return list1;
+    
+}
+void SLL::deleteNode(int val){
+    if(!head){
+        //list is empty
+        return ;
+    }
+    
+    node *ptr = head;
+    node *pre ;
+    
+    
+    while(ptr && ptr->data !=val){
+        pre = ptr;
+        ptr = ptr->next;
+        
+    }
+    if(ptr==0){
+        //not founded
+        return;
+    }else{
+        if(ptr !=head){
+            pre->next = ptr->next;
+            delete ptr;
+        }else{
+            //founded at head
+            deleteFromHead();
+        }
+    }
+}
+void SLL::reverse(){
+    if(head){
+        node *curr = head, *pre=0,*next=0;
+        
+        while(curr){
+            next = curr->next;
+            curr->next = pre;
+            pre = curr;
+            curr = next;
+        }
+        head = pre;
+    }
+    
+}
+
+
+
+
+int main(){
+    
+    
+    return 0;
+}
