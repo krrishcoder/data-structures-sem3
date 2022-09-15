@@ -1,0 +1,24 @@
+on command prompt----------------------
+g++ main.cpp ------>to compile the code
+a.exe 12 34  ------->to execute and pass the commands
+
+======================================================================
+to compile and give name --> g++ ryan.cpp -o ryan
+to launch-----------> ./ryan
+to launch and pass argument-----------> ./ryan 12 34 45
+
+
+to save and  edit file on editor -->  nano ryan.cpp
+only view the code--> cat main.cpp
+
+other way
+to compile this  ---> g++ -wall -std=c++20 main.cpp
+
+to access ----------> vi main.cpp
+good way to access---> nano main.cppnano +
+to save -----------> :wq
+
+
+imp--->When we use the Linux or UNIX operating system, we need 
+to include “unistd.h” header file in our program to use the sleep () function.
+
