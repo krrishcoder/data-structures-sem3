@@ -1,0 +1,13 @@
+#include <iostream>
+using namespace std;
+
+#include <stdlib.h>
+#include <stdio.h>
+
+int main()
+
+{
+cout<<"the kernel version is : ";
+system("cat /proc/version");
+return 0;
+}
