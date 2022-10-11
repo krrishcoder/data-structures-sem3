@@ -1,207 +1,131 @@
-#include <iostream>
-#include <string>
-#include <utility>
-#include <vector>
-#include <algorithm>
-#include <list>
-
-using namespace std;
-
-//thtis is sjf (non preemetive)
-
-class process{
-    static int kk;
-
-string name ="P"+to_string(kk);
-
-int arrival_time;
-int burst_time;
-
-public:
-   int getArrival(){
-       return arrival_time;}
-
-   int getBurst(){
-     return burst_time;}
-
-     process(int a,int b){
-        arrival_time= a;
-        burst_time=b;
-        kk++;
-     }
-
-     void print(){
-     cout<<name<<"  "<<"arrival :"<<arrival_time<<"burst time :"<<burst_time<<endl;}
+#include<iostream>
+#include<vector>
+#include<algorithm>
+#include<map>
+#include<set>
+using  namespace std;
 
 
-       bool operator<(const process &r) const
-    {
-         if(burst_time == r.burst_time){
-            return arrival_time <= r.arrival_time;
-   }
-        return burst_time < r.burst_time;
-
-    }
-
-    // overload the operator> (if required)
-    bool operator>(const process &r) const
-    {
-         if(burst_time == r.burst_time){
-            return arrival_time <= r.arrival_time;
-}
-        return burst_time < r.burst_time;
-    }
-    bool equals(process b){
-        if(name == b.name){
-            
-            return true;
-        }else{
-            return false;
+class Process{
+    private:
+        int burst;
+        int arival;
+        string name;
+        static int order;
+    public:
+        Process(int burst,int arival){
+            this->burst=burst;
+            this->arival=arival;
+            name='P'+to_string(order++);
         }
-    }
+        int getArival(){
+            return arival;
+        }
+        int getBurst(){
+            return burst;
+        }
+        string getName(){
+            return name;
+        }
+        bool operator <(const Process& p){
+            if(p.burst==burst){
+                return this->arival<p.arival;
+            }
+            return this->burst<p.burst;
+        }
+        bool operator >(const Process &p){
+            if (p.burst==burst)
+            {
+                return this->arival>p.burst;;
+            }
+            return this->burst>p.burst;
+        }
 
 };
 
-
-void removeElement(vector<process> &v ,process p){
-
-    for(int i=0;i<v.size();++i){
-        if(v.at(i).equals(p)){
-            v.erase(v.begin()+i);
+void Remove_Process(vector<Process> &p,Process key){
+    
+    for (int i = 0; i < p.size(); i++)
+    {
+        if (p.at(i).getName()==key.getName())
+        {
+            p.erase(p.begin()+i);
         }
     }
-
 }
 
-int process::kk = 1;
-
-int main()
-{
-
-     process p1(1,3);
-    process p2(2,4);
-    process p3(1,2);
-    process p4(4,4);
 
 
-    vector<process> v ;
-    vector<process> temp;
+int Process::order=1;
 
-      v.push_back(p1);
-      v.push_back(p2);
-      v.push_back(p3);
-      v.push_back(p4);
+int main(){
+    Process p1(6,2);
+    Process p2(2,5);
+    Process p3(8,1);
+    Process p4(3,0);
+    Process p5(4,4);
 
-   
-
-    vector<int> arr;
-    vector<int> tracking;
-    int process_done=0;
-
-  
-
-
-    list<process> que;
-
-
+    vector<Process> Pvec={p1,p2,p3,p4,p5};
+    sort(Pvec.begin(),Pvec.end());
+    // for (int i = 0; i <Pvec.size(); i++)
+    // {
+    //     cout<<Pvec.at(i).getName()<<" "<<Pvec.at(i).getArival()<<"  "<<Pvec.at(i).getBurst()<<" "<<endl;
+    // }
     int timer=0;
-    
-    
-    
-
-
-    for(int i=0;i<4;i++){
-        if(v.at(i).getArrival() <=timer){  // 0
-            que.push_back(v.at(i));
+    int process_done=0;
+    vector<int> completion_time;
+    vector<Process> completed_Process;
+    // map<int ,string> completion_time;
+    while (process_done!=5)
+    {
+        vector<Process> temp;
+        for (int i = 0; i <Pvec.size(); i++)
+        {
+            if (Pvec.at(i).getArival()<=timer)
+            {
+                temp.push_back(Pvec.at(i));
+            }
+        }
+        if(temp.size()!=0){
+            timer+=temp.front().getBurst();
+            completion_time.push_back(timer);
+            completed_Process.push_back(temp.front());
+            Remove_Process(Pvec,temp.front());
+            process_done++;       
+        }else{
+           timer++;
         }
     }
-    que.sort();
-
-
-    bool flag=false;
+    for (int i = 0; i < completion_time.size(); i++)
+    {
+        cout<<"ct : "<<completion_time.at(i)<<endl;
+    }
     
+    int tat=0;
+    vector<int> tat_vec;
+    for (int i = 0; i < completed_Process.size(); i++)
+    {
+        tat+=completion_time.at(i)-completed_Process.at(i).getArival();
+        tat_vec.push_back(completion_time.at(i)-completed_Process.at(i).getArival());
+    }
+
+    int wt=0;
+    for (int i = 0; i < completed_Process.size(); i++)
+    {
+        wt+=tat_vec[i]-completed_Process.at(i).getBurst();
+    }
     
+    float average_tat,average_wt;
+    average_tat=tat/5.0;
+    cout<<"Average Total Around time : "<<average_tat<<" \n";
+    average_wt=wt/5.0;
+    cout<<"Average Waiting time : "<<average_wt<<" ";
+
+
+
     
-     arr.push_back(0);   
-   while(process_done != 4){
 
-
-   if(que.size()==0){
-    timer++;                                  //4 5
-     for(int z=0;z<v.size();z++){
-        if(v.at(z).getArrival() <=timer){
-            que.push_back(v.at(z));
-        }
-    }
-    que.sort();
-    flag = true;
-
-   }else{
-       
-       //also remove that process which is done
-       
-  if(flag){
-     tracking.push_back(0);
-     arr.push_back(timer);
-   }
- tracking.push_back(1);
-
-    arr.push_back( que.front().getBurst()+arr.at(arr.size()-1));
-
-    timer += que.front().getBurst();   //right
-
- 
-flag=false;
-process_done++;
-
-temp.push_back(que.front());
-removeElement(v,que.front());
-
-que.clear();
-              for(int i=0;i<v.size();i++){
-        if(v.at(i).getArrival() <=timer){
-            que.push_back(v.at(i));
-        }
-    }
-    que.sort();
-
-   }
-
-}
-//calculating waiting time
-int result=0;
-
-for(int i=0,j=0;i<4;){
-    if(tracking.at(j)){
-        result +=  arr.at(j) - temp.at(i).getArrival();
-        cout<<arr.at(j)<<" - "<<temp.at(i).getArrival()<<endl;
-        i++;
-        j++;
-        
-    }else{
-        j++;
-        
-    }
-}
-cout<<"waiting time is : "<<result/4.0<<endl;
-
-//calculating total around time
-int total=0;
-
-for(int i=0,j=0;i<4;){
-    if(tracking.at(j)){
-        total +=  arr.at(j+1) - temp.at(i).getArrival();
-        cout<<arr.at(j+1)<<" - "<<temp.at(i).getArrival()<<endl;
-        i++;
-        j++;
-        
-    }else{
-        j++;
-        
-    }
-}
-cout<<"total turn around time is : "<<total/4.0<<endl;
-
+    
 
     return 0;
 }
