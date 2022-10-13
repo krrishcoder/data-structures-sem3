@@ -59,12 +59,13 @@ void copyStack(stack<bool> &ptr, stack<bool> temp){
 
 
 //=============================================================
-void calCulateRem(int inputInt,int crcDegree){
+int calCulateRem(int inputInt,int crcDegree){
     
  
     stack<bool> stk1;  //big stack
     stack<bool> stk2;   //crc stack
     stack<bool> stk3;
+    int saveOriginal = inputInt;
     
     while(inputInt){
         stk1.push(inputInt&1);
@@ -103,12 +104,24 @@ void calCulateRem(int inputInt,int crcDegree){
         printStack(stk1);
         
     }
-    
-    cout<<"size : "<<stk1.size()<<endl;
+int ans=saveOriginal;
+
+  ans = ans>>crcDegree;
+
     while(!stk1.empty()){
-        cout<<stk1.top();
+      //  cout<<"top : "<<stk1.top()<<endl;
+        if(stk1.top()){
+            ans = ans<<1;
+            ans = ans|1;
+        }else{
+             ans = ans<<1;
+        }
         stk1.pop();
     }
+
+
+      
+   return ans;
     
 }
 
@@ -154,7 +167,10 @@ int main()
    
 cout<<endl<<endl;
 cout<<" answer is : ";
-   calCulateRem( inputInt,degreeOfCrc);
+  int ans=calCulateRem( inputInt,degreeOfCrc);
+  bitset<32> y(ans);
+  cout<<endl;
+  cout<<" finally : "<<y<<endl;
    
    
 
