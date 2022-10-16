@@ -1,0 +1,56 @@
+#include<sys/types.h>
+#include<sys/wait.h>
+
+#include<stdio.h>
+#include<unistd.h>
+#include<time.h>
+#include<stdlib.h>
+
+
+
+int main(){
+
+
+
+//parent and child execute a) before terminating , the parent waits for the child to finish its task
+
+pid_t pid1;
+pid1 = fork(); // child process
+
+int sum=0;
+
+
+if(pid1 !=0){
+
+//parent process
+
+//wait
+wait(NULL);
+//now parent can do some task
+
+printf("now parent can terinate");
+
+return 0;
+}
+
+
+
+
+if(pid1==0){
+//in child process
+
+printf("child has begun its task");
+printf("\n");
+for(int i=5;i>=0;--i){
+
+for(int j=i;j>=0;--j){
+printf("*");
+}
+printf("\n");
+
+}
+}
+
+
+
+}
