@@ -7,7 +7,7 @@
 
 using namespace std;
 
-//thtis is sjf (non preemetive)
+
 
 class process{
     static int kk;
