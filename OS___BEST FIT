@@ -103,12 +103,16 @@ int prev=0;
    int k=0;
    while(objects[i]->process_size>memoryBlocks[k]){
     k++;
+    if(k==no_of_Mblocks){
+        break;
+    }
    }
+   if(k !=no_of_Mblocks){
    objects[i]->block_assigned =" in block "+to_string(memoryStatus[k]);
 
       cout<<"  =  "<<memoryBlocks[k]<<" - "<<(objects[i]->process_size )<<endl;
    memoryBlocks[k] = memoryBlocks[k] - (objects[i]->process_size );
-
+   }
 
 
    }
