@@ -59,31 +59,28 @@ int main()
     int x=0;
     cin>>x;
     memoryBlocks[i] = x;
-    memoryStatus[i]=0;
+    memoryStatus[i]=i+1;
     }
 
-   for(int i=0,j=0;i<no_of_processes;){     //j will account for memory number // 300, 100    100,300
+    for(int i=0,j=0;i<no_of_processes;i++){     //j will account for memory number // 300, 100    100,300
 
-   if(j==no_of_Mblocks){
-    j=0;
-    ++i;
-    if(i<=no_of_processes){
+
+   int k=0;
+   while(objects[i]->process_size>memoryBlocks[k]){
+    k++;
+    if(k==no_of_Mblocks){
         break;
     }
    }
 
-   if(memoryStatus[j] ==0 & memoryBlocks[j]>= ((objects[i])->process_size)){ // if there is memory
-        memoryStatus[j]=1;
-        objects[i]->block_assigned = "allocated in "+to_string(j+1);
-        ++i;
-        j=0;
-    }else{
+   if(k != no_of_Mblocks){
+   objects[i]->block_assigned =" in block "+to_string(memoryStatus[k]);
 
-    //if no memory than move above
-    ++j;
-    }
+      cout<<"  =  "<<memoryBlocks[k]<<" - "<<(objects[i]->process_size )<<endl;
+   memoryBlocks[k] = memoryBlocks[k] - (objects[i]->process_size );
 
 
+   }
    }
 
 cout<<endl;
@@ -96,4 +93,3 @@ cout<<"-------------------------------------------------------------------------
 
     return 0;
 }
-
