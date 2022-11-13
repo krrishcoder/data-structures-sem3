@@ -3,10 +3,17 @@
 #include <stack>
 #include <math.h>
 #include <bitset>
+#include <cstdlib>
+#include <stdlib.h>
+#include <time.h>
+
 
 using namespace std;
 
-static int CRC =  0b1101;            // X^3 + x^1 + 1
+static int CRC =  0b1101;            // X^3 + x^1 + 1 ,  degree=3
+
+
+
 
 int degreCal( unsigned int n){
     
@@ -40,6 +47,7 @@ void printStack(stack<bool> ptr){
     cout<<endl;
     
 }
+
 void printData(int data){
   stack<bool> stk;
    while(data){
@@ -48,6 +56,44 @@ void printData(int data){
    }
    printStack(stk);
 }
+
+
+void errorInjection(int &data,int limit){ //limit is the number of bits
+	
+	
+	
+	
+	int k=0;
+	srand ( time(NULL) );
+
+	k=	(rand()%(2*limit)); // 7,  14 
+
+cout<<" k " <<k<<endl;
+
+
+if(k<limit){
+
+	int a =1;
+	
+	for(int i=0;i<k;++i){
+	 a=	a<<1;
+	}
+	
+	cout<<"a ";
+	printData(a);
+  data=data|a ;
+  cout<<endl;
+  cout<<"printing noisy data==================";
+printData(data);
+	
+	cout<<endl;
+}else{
+	//no error injected
+	
+}
+	
+}
+
 
 void copyStack(stack<bool> &ptr, stack<bool> temp){
     
@@ -103,15 +149,16 @@ int calCulateRem(int inputInt,int crcDegree){
         }
         
        
-        while(stk1.top() != 1){
+        while(stk1.top() != 1){         //removing zeroes
             stk1.pop();
              if(stk1.size()<=crcDegree){
             break;
         }
         }
-        printStack(stk1);
+      //  printStack(stk1);
         
     }
+     printStack(stk1);
 int ans=0;
 
 
@@ -134,62 +181,87 @@ int ans=0;
 }
 
 
-
+void printBitS( bitset<16> y){
+	
+	bool start=false;
+	int i=15;
+	for(;i>=0;i--){
+		if(y[i]== 1){
+			break;
+		}
+	}
+	
+	while(i >=0){
+		cout<<y[i--];
+	}
+}
 
 
 
 int main()
 {
+	
+	cout<<"Enter the data to be send :";
    string input;
    cin>>input;             // 10110110
    
   unsigned int inputInt=0;
    for(int i= input.length()-1,j=0; i>=0;--i,j++){
-       
+          
        if(input[i]=='1'){
                       
-           inputInt += 1*pow(2,j);
+            inputInt += 1*pow(2,j);
        }else{
              inputInt += 0*pow(2,j);
-       }
-       
+       }      
    }
   
 
   
-   cout<<endl;
-   cout<<"you enetred : ";
-   print(inputInt);
+ 
    
    
    
-//appending
+  //appending 0's at the end of data
   int degreeOfCrc = degreCal(CRC)-1;
   
   for(int i = 0 ;i<degreeOfCrc;++i){
-      inputInt=inputInt<<1;
+      inputInt=inputInt<<1;            //will be working on bits
   }
-    cout<<endl;
-   cout<<"after appending your data became : ";
-   print(inputInt);
-   
-cout<<endl<<endl;
-cout<<" answer is : ";
-  int ans=calCulateRem( inputInt,degreeOfCrc);
-  int encryptedData = inputInt;
-    encryptedData = encryptedData|ans;
+  
+//========================sender side===============================================
+  int ans=calCulateRem( inputInt,degreeOfCrc); //ans is check sum
+
+  int encryptedData = inputInt; 
+    encryptedData = encryptedData|ans;          //insrting checksum
     
   
-  bitset<32> y(encryptedData);
+  bitset<16> y(encryptedData);
   cout<<endl;
-  cout<<" finally : "<<y<<endl;
+  cout<<" DATA WHICH WILL BE FINALLY SEND AFTER (APPENDING CHECKSUM) : ";
+  printBitS(y);
+  cout<<endl;
    
    
+   //=============here inject some error to simulate noisy channel========================================
+     int dataR =  encryptedData;
+     
+     int numberOfBits = degreCal(dataR);
+     cout<<endl;
+     cout<<" important check ------------"<<numberOfBits<<endl<<endl;
+     
+     errorInjection(dataR,numberOfBits);
+     
+     
    
-   //=======================after data is sent=======================================================================
    
-   int dataR =  encryptedData;
+   //=======================after data is sent Receiver side=======================================================================
+   
+
    int degreeCRC = degreCal(CRC)-1;
+   
+   cout<<endl;
+   cout<<" 	remainder at reciever end : ";
    if(calCulateRem(dataR,degreeCRC)){
        cout<<"Since the remainder is not all zeroes, the error  is detected at the receiver side."<<endl;
        
