@@ -1,0 +1,63 @@
+#include <iostream>
+#include <string>
+#include <thread>
+#include <chrono>
+
+using namespace std;
+using namespace std::literals::chrono_literals;
+
+int ack=0;
+
+
+int receiver(const string r_packet){
+
+this_thread::sleep_for(5s);
+cout<<"received the data : ["<<r_packet<<"]"<<endl;
+
+return 1;
+}
+
+
+void sending(string packet){
+    const string s_packet =packet;
+ cout<<"sending...["<<s_packet<<"]  to sender"<<endl;
+
+ cout<<"waiting.....for ack"<<endl;
+
+ ack =receiver(s_packet);
+ while(!ack){
+    this_thread::sleep_for(1s);
+ }
+  //sender waits for ack for an infinite amount of time
+
+
+}
+
+
+int main()
+{
+
+
+//sender side
+ // rule 1:: send 1 data packet at a time
+ //rule 2 ::send the next packet only after receiving ack for the prevoius
+
+ //receiver side
+ //rule 1 :: receive and consume data packet
+ //rule 2 :: after consuming packet, ack need to be sent ( flow control)
+
+ cout<<"sender side "<<endl;
+string packets[5] = {"krishna","ayush","chetan","anshuman","amisha"};
+cout<<"now send the packets of string"<<endl;
+
+for(int i=0;i<5;++i){
+
+thread worker(sending,packets[i]);
+worker.join(); //wait
+ack = 0;
+
+}
+
+
+    return 0;
+}
